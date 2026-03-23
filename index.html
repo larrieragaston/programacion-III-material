@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Programación III - Material</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      background: linear-gradient(135deg, #1e3a5f, #2563eb);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    header p { font-size: 1.1rem; opacity: 0.85; }
+
+    main {
+      max-width: 720px;
+      width: 100%;
+      padding: 2rem 1.5rem;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: #334155;
+    }
+
+    .card-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .card-list a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      color: #1e293b;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+
+    .card-list a:hover {
+      border-color: #2563eb;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+    }
+
+    .card-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      background: #eff6ff;
+      color: #2563eb;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .card-content strong { display: block; font-size: 1rem; }
+    .card-content span { font-size: 0.85rem; color: #64748b; }
+
+    footer {
+      margin-top: auto;
+      padding: 2rem;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Programación III</h1>
+    <p>INSPT - UTN &middot; Material de clase</p>
+  </header>
+
+  <main>
+    <h2>Presentaciones</h2>
+    <ul class="card-list">
+      <li>
+        <a href="./introduccion/" data-dev-port="3031">
+          <div class="card-number">1</div>
+          <div class="card-content">
+            <strong>Introducción</strong>
+            <span>Presentación de la materia, condiciones de cursada y contacto</span>
+          </div>
+        </a>
+      </li>
+      <!-- Agregar futuras presentaciones: usar data-dev-port para el puerto local de Slidev -->
+    </ul>
+  </main>
+
+  <footer>
+    Gastón Larriera &middot; gaston.larriera@inspt.utn.edu.ar
+  </footer>
+
+  <script>
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      document.querySelectorAll('a[data-dev-port]').forEach(function (link) {
+        link.href = 'http://localhost:' + link.dataset.devPort + '/';
+      });
+    }
+  </script>
+</body>
+</html>

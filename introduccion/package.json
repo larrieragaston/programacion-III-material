@@ -1,0 +1,13 @@
+{
+  "name": "programacion-III-introduccion",
+  "private": true,
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build --base /programacion-III-material/introduccion/",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^52.14.1",
+    "@slidev/theme-default": "^0.25.0"
+  }
+}
