@@ -10,6 +10,10 @@ transition: slide-left
 mdc: true
 ---
 
+---
+layout: center
+---
+
 # Programación III
 
 <div class="abs-b mb-8 text-sm opacity-60">

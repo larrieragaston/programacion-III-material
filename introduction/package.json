@@ -1,9 +1,9 @@
 {
-  "name": "programacion-III-introduccion",
+  "name": "programacion-III-introduction",
   "private": true,
   "scripts": {
     "dev": "slidev",
-    "build": "slidev build --base /programacion-III-material/introduccion/",
+    "build": "slidev build --base /programacion-III-material/introduction/",
     "export": "slidev export"
   },
   "dependencies": {
