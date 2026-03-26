@@ -1,0 +1,96 @@
+---
+description: Workflow for converting a PDF presentation into a new Slidev presentation within this monorepo
+alwaysApply: false
+---
+
+# PDF to Slidev Presentation Workflow
+
+When the user provides a PDF to convert into a new presentation, follow these steps in order.
+
+## 1. Extract text with OCR
+
+Run the existing OCR script against the provided PDF:
+
+```bash
+python3 ocr_extract.py "/path/to/file.pdf"
+```
+
+Prerequisites (install once if missing): `brew install tesseract tesseract-lang poppler` and `pip3 install pdf2image pytesseract Pillow`.
+
+Read the output carefully — OCR is imperfect. Cross-reference with the original PDF (use the Read tool on the PDF) to fix garbled text, missing code blocks, and broken tables.
+
+## 2. Create the presentation subdirectory
+
+Choose a short, lowercase, English slug (e.g. `introduction`, `lambda-calculus`, `clojure`).
+
+```
+<slug>/
+  package.json
+  slides.md
+  public/logos/   (if images are needed)
+```
+
+## 3. Create `package.json`
+
+Use this template — only change the `name` and `build --base` path:
+
+```json
+{
+  "name": "programacion-III-<slug>",
+  "private": true,
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build --base /programacion-III-material/<slug>/",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^52.14.1",
+    "@slidev/theme-bricks": "^0.25.0"
+  }
+}
+```
+
+Then run `npm install` inside the new directory (with `ulimit -n 10240` on macOS).
+
+## 4. Write `slides.md`
+
+Use `theme: bricks` and follow the conventions from the existing `introduction/slides.md`:
+
+- Frontmatter: theme, title, info, author, keywords, transition, mdc
+- Use Slidev layouts: `center`, `default`, `two-cols`, `image-right`, etc.
+- Code blocks: use Slidev syntax highlighting with line highlights `{all|1|2-4}`
+- Use `<v-click>` for progressive reveal
+- Use UnoCSS/Tailwind utility classes for layout (grid, flex, absolute positioning)
+- Logos go in `public/logos/` — download from CDN (devicons, simpleicons) or create SVGs
+- Language: Spanish (matching the original PDF content)
+
+## 5. Download icons/logos
+
+Use jsdelivr CDN for devicons:
+
+```bash
+curl -sL "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/<name>/<name>-original.svg" -o public/logos/<name>.svg
+```
+
+Verify each SVG is actual content (not a redirect/HTML page). If broken, create a minimal custom SVG.
+
+## 6. Update root `index.html`
+
+Add a new `<li>` entry inside `.card-list` with:
+- Incremented card number
+- `href="./slug/"` and `data-dev-port` matching the next available port (3031 + N)
+- Title and short description
+
+## 7. Test locally
+
+```bash
+cd <slug> && ulimit -n 10240 && npx slidev --port <port>
+```
+
+Or from the root: `npm run dev` (uses `dev.sh` which auto-discovers all presentations).
+
+Verify every slide renders correctly. Check for broken images, OCR artifacts, and layout issues.
+
+## 8. Commit and push (optional — only if user requests)
+
+The user always reviews the generated presentation manually before committing. Only commit and push if explicitly asked.
