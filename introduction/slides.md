@@ -12,31 +12,59 @@ mdc: true
 
 # Programación III
 
+Programación Funcional & Desarrollo Web Full-Stack
+
 <div class="abs-b mb-8 text-sm opacity-60">
-INSPT - UTN
+INSPT - UTN · Ciclo Lectivo 2026
 </div>
 
 ---
 layout: center
 ---
 
-# Profesor: Gastón A. Larriera
+# Prof. Ing. Gastón A. Larriera
 
+<div class="mt-4">
+
+**Formación**
+
+- Ingeniero en Informática
 - Técnico Superior en Informática
 - Profesor en Disciplinas Industriales
-- Ingeniero en Informática
-- Software Engineer ([MercadoLibre](https://www.mercadolibre.com.ar))
+
+</div>
+
+<div class="mt-4">
+
+**Experiencia**
+
+- Software Engineer en [MercadoLibre](https://www.mercadolibre.com.ar)
+
+</div>
+
+<div class="flex gap-6 items-center justify-center mt-8">
+  <a href="https://github.com/larrieragaston" target="_blank" class="flex items-center gap-2 opacity-70 hover:opacity-100">
+    <img src="/logos/github.svg" alt="GitHub" class="h-6" /> GitHub
+  </a>
+  <a href="https://www.linkedin.com/in/gaston-ariel-larriera/" target="_blank" class="flex items-center gap-2 opacity-70 hover:opacity-100">
+    <img src="/logos/linkedin.svg" alt="LinkedIn" class="h-6" /> LinkedIn
+  </a>
+</div>
 
 ---
-layout: default
+layout: center
 ---
 
 # Presentación de alumnos
 
-- Nombre
-- ¿Profesorado?
-- Conocimientos de programación
-- Trabajo
+<div class="mt-6 text-left max-w-md mx-auto">
+
+- ¿Cómo te llamás?
+- ¿Estás haciendo el profesorado?
+- ¿Qué conocimientos de programación tenés?
+- ¿Trabajás en algo relacionado?
+
+</div>
 
 ---
 layout: center
@@ -44,42 +72,50 @@ layout: center
 
 # Contenidos de la materia
 
+Lo que vamos a ver este año
+
 ---
 layout: default
 ---
 
-# Primera parte
+# 1er Cuatrimestre
 
-1. **Cálculo Lambda**
-2. **Clojure**
+<div class="grid grid-cols-2 gap-4">
+<div>
 
-<div class="relative w-full h-48 mt-4">
-  <img src="/logos/lambda.svg" alt="Lambda" class="absolute h-16" style="top: 10%; left: 5%;" />
-  <img src="/logos/clojure.svg" alt="Clojure" class="absolute h-14" style="top: 5%; left: 35%;" />
-  <img src="/logos/lisp.svg" alt="Lisp" class="absolute h-14" style="top: 50%; left: 55%;" />
-  <img src="/logos/haskell.svg" alt="Haskell" class="absolute h-12" style="top: 15%; left: 72%;" />
-  <img src="/logos/scala.svg" alt="Scala" class="absolute h-14" style="top: 55%; left: 15%;" />
+1. **Unidad 1** — Cálculo Lambda
+2. **Unidad 2** — Programación Funcional
+   - Funciones puras y de orden superior
+   - Inmutabilidad y transparencia referencial
+   - Recursividad
+3. **Unidad 3** — Clojure
+
+</div>
+<div class="relative h-64">
+  <img src="/logos/lambda.svg" alt="Lambda" class="absolute h-16" style="top: 5%; left: 8%;" />
+  <img src="/logos/clojure.svg" alt="Clojure" class="absolute h-14" style="top: 10%; left: 55%;" />
+  <img src="/logos/lisp.svg" alt="Lisp" class="absolute h-14" style="top: 50%; left: 60%;" />
+  <img src="/logos/haskell.svg" alt="Haskell" class="absolute h-12" style="top: 55%; left: 15%;" />
+  <img src="/logos/scala.svg" alt="Scala" class="absolute h-14" style="top: 30%; left: 35%;" />
+</div>
 </div>
 
 ---
 layout: default
 ---
 
-# Segunda parte
+# 2do Cuatrimestre
 
 <div class="grid grid-cols-2 gap-4">
 <div>
 
-1. **Programación Web FullStack**
-   1. Mongo
-   2. Express
-   3. React
-   4. Node
-2. **API Rest**
-3. **JSON**
-4. **JavaScript**
-5. **HTML**
-6. **CSS**
+4. **Unidad 4** — Desarrollo Web Full-Stack
+   - MongoDB
+   - Express
+   - React
+   - Node.js
+   - API Rest · JSON
+   - HTML · CSS · JavaScript
 
 </div>
 <div class="relative h-64">
@@ -152,6 +188,8 @@ layout: center
 
 # Programación Funcional
 
+Un vistazo a por qué importa
+
 ---
 layout: default
 ---
@@ -180,6 +218,12 @@ for (String color : colors) {
 System.out.println("Has color red? " + hasRed);
 ```
 
+<v-click>
+
+**¿Qué problemas sugiere este enfoque?**
+
+</v-click>
+
 ---
 layout: default
 ---
@@ -189,13 +233,3 @@ layout: default
 ```java
 System.out.println("Has color red?: " + colors.contains("red"));
 ```
-
-<br>
-
-### ¿Cuál es el problema?
-
-<v-click>
-
-<!-- TODO: agregar problemas que resuelve la programación funcional -->
-
-</v-click>
