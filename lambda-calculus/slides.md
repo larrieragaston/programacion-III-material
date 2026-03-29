@@ -12,24 +12,29 @@ mdc: true
 
 # Cálculo Lambda
 
----
-layout: center
----
+Unidad 1 — Programación III
 
-# Ideador
+<img src="/logos/lambda.svg" alt="Lambda" class="h-20 mx-auto mt-6 opacity-80" />
+
+<div class="abs-b mb-8 text-sm opacity-60">
+INSPT - UTN · Ciclo Lectivo 2026
+</div>
 
 ---
-layout: center
+layout: image-right
+image: /images/alonzo-church.jpg
 ---
 
 # Alonzo Church
 
-<div class="mt-6 text-left max-w-md mx-auto">
+Lógico y matemático estadounidense.
 
-- Lógico - Matemático
-- 1930
+<div class="mt-4">
+
+- Desarrolló el **Cálculo Lambda** (década de 1930)
 - Computación teórica
-- Profesor de Alan Turing
+- Profesor de **Alan Turing**
+- La **Tesis de Church-Turing** establece la equivalencia entre el cálculo lambda y la máquina de Turing
 
 </div>
 
@@ -45,18 +50,17 @@ layout: default
 
 # Sistema Formal
 
+El cálculo lambda es un sistema formal que sirve como base teórica de la programación funcional.
+
 - Definición de función
 - Aplicación de función
 - Recursividad
 
----
-layout: default
----
+<div class="mt-4">
 
-# Función computable
+Toda **función computable** puede ser expresada y evaluada mediante este sistema.
 
-- Expresada
-- Evaluada
+</div>
 
 ---
 layout: default
@@ -64,14 +68,12 @@ layout: default
 
 # ≠ Máquina de Turing
 
-- Reglas de transformación
-- Implementación real
+A diferencia de la máquina de Turing, el cálculo lambda se basa en:
 
----
-layout: center
----
+- **Reglas de transformación** sobre expresiones simbólicas
+- Sin necesidad de una **implementación real** (cinta, estados, cabezal)
 
-# Programas como expresiones
+Ambos modelos son **equivalentes en poder computacional** (Tesis de Church-Turing).
 
 ---
 layout: default
@@ -79,25 +81,28 @@ layout: default
 
 # Programa funcional
 
-- Expresión
-  - Algoritmo
-  - Entradas
+Un programa funcional es una **expresión** compuesta por:
+
+- Un **algoritmo** (las transformaciones a aplicar)
+- Las **entradas** (los datos sobre los que opera)
+
+El resultado se obtiene **evaluando** (reduciendo) la expresión.
 
 ---
 layout: default
 ---
 
-# Reglas de conversión
-
-**Reducción**
+# Reglas de conversión — Reducción
 
 $$E[P] \to E[P'], \text{ siempre y cuando } P \to P'$$
 
+Una expresión se **reduce** reemplazando una subexpresión por su forma simplificada.
+
 ---
 layout: default
 ---
 
-# Ejemplo
+# Ejemplo — Reducción aritmética
 
 $$
 (7 + 4) \times (8 + 5 \times 3)
@@ -119,7 +124,7 @@ $$\to 253$$
 layout: default
 ---
 
-# Ejemplo
+# Ejemplo — Reducción funcional
 
 ```
 primero (ordenar (unir (a, ordenar (b))))
@@ -141,9 +146,11 @@ layout: default
 
 # Elementos
 
-- Variable
-- Abstracción
-- Aplicación
+Una expresión lambda puede ser una de tres cosas:
+
+- **Variable**: un nombre ($x$, $y$, $z$)
+- **Abstracción**: una función ($\lambda x.M$)
+- **Aplicación**: aplicar una función a un argumento ($M\ N$)
 
 ---
 layout: default
@@ -157,7 +164,7 @@ $$\langle expresión\ \lambda \rangle ::= \langle variable \rangle\ |\ (\lambda 
 layout: default
 ---
 
-# Ejemplos
+# Ejemplos — Expresiones lambda
 
 ```
 x
@@ -173,13 +180,47 @@ layout: default
 
 # Convenciones
 
-$$(((\lambda x.\ (\lambda y.\ (y\ x)))\ a)\ b)$$
+<div class="mt-2">
+
+**Abreviación de múltiples parámetros:**
+
+$$\lambda x.\lambda y.\lambda z.M \equiv \lambda x\ y\ z.M$$
+
+</div>
 
 <v-click>
 
-Se puede abreviar como:
+<div class="mt-4">
 
-$$\lambda x\ y.\ y\ x\ \ a\ \ b$$
+**Asociatividad izquierda de la aplicación:**
+
+$$M\ N\ P \equiv (M\ N)\ P$$
+
+</div>
+
+</v-click>
+
+<v-click>
+
+<div class="mt-4">
+
+**Alcance del λ se extiende lo más posible a la derecha:**
+
+$$\lambda x.M\ N \equiv \lambda x.(M\ N)$$
+
+</div>
+
+</v-click>
+
+<v-click>
+
+<div class="mt-4">
+
+**Ejemplo completo:**
+
+$$(((\lambda x.\ (\lambda y.\ (y\ x)))\ a)\ b) \equiv \lambda x\ y.\ y\ x\ \ a\ \ b$$
+
+</div>
 
 </v-click>
 
@@ -193,16 +234,21 @@ layout: center
 layout: default
 ---
 
-# Funciones Matemáticas...
+# De funciones matemáticas a variables
 
-- $f(x) = x^2 + 2$
-- $f(z, w) = z + w^2 + 2$
+En una función matemática, las variables pueden estar **ligadas** a un parámetro o ser **libres** (depender del contexto externo):
+
+- $f(x) = x^2 + 2$ → $x$ está **ligada** al parámetro
+- $f(z, w) = z + w^2 + 2$ → $z$ y $w$ están **ligadas**
+- $g(x) = x + y$ → $x$ está **ligada**, pero $y$ es **libre**
+
+En el cálculo lambda ocurre exactamente lo mismo con el operador $\lambda$.
 
 ---
 layout: default
 ---
 
-# Variables Libres y Ligadas
+# Variables Libres y Ligadas — Definición
 
 La variable **x** ocurre **ligada** en la expresión N si y solo si:
 
@@ -222,7 +268,7 @@ La variable **x** ocurre **libre** en la expresión N si y solo si:
 layout: default
 ---
 
-# Ejemplo
+# Ejemplo — Variables libres y ligadas
 
 | Expresión | Libres | Ligadas |
 |---|---|---|
@@ -248,18 +294,19 @@ layout: default
 
 $$\lambda x.\ M =_\alpha \lambda y.\ M[y/x]$$
 
+Permite **renombrar** la variable ligada de una abstracción sin cambiar el significado de la expresión.
+
 ---
 layout: default
 ---
 
-# Ejemplos α
+# Ejemplos — Conversión α
 
 ```
-λx.x                   → λy.y
-λx.y x                 → λz.y z
-λx.z x x (λu x.x u) v x
-    → λy.z y y (λu x.x u) v y
-λx y.x z y             → ?
+λx.x                      →α λy.y
+λx.y x                    →α λz.y z
+λx.z x x (λu x.x u) v x   →α λy.z y y (λu x.x u) v y
+λx y.x z y                → ?
 ```
 
 ---
@@ -272,17 +319,19 @@ layout: default
 
 $$\beta\text{-redex} \Rightarrow (\lambda x.M)\ N$$
 
+Consiste en realizar la **reducción** de una β-redex: sustituir todas las ocurrencias libres de $x$ en $M$ por $N$.
+
 ---
 layout: default
 ---
 
-# Ejemplo β-redex
+# Ejemplo — Identificando β-redex
 
 ```
-(λx.x x) z
-(λx.x x) (λy.y y)
-(λx.x) (λy.y y) z
-(λx.(λu.u) (λv.x v)) ((λt.t t) w)
+(λx.x x) z                              ← β-redex
+(λx.x x) (λy.y y)                       ← β-redex
+(λx.x) (λy.y y) z                       ← β-redex
+(λx.(λu.u) (λv.x v)) ((λt.t t) w)       ← β-redex
 ```
 
 <div class="mt-4">
@@ -298,30 +347,32 @@ x (λy.y y)    ← FORMA NORMAL
 layout: default
 ---
 
-# Regla de conversión Beta (β)
-
-*Aplicación de un valor en una entrada*
-
-Consiste en realizar la **reducción** de una β-redex
-
----
-layout: default
----
-
-# Ejemplos β
+# Ejemplos — Reducción β
 
 ```
 (λx.x) z =β z
+```
 
+<v-click>
+
+```
 (λx.(λu.u) (λv.x v)) ((λt.t t) w)
-  =β (λu.u) (λv.(λt.t t) w v)
-  =β λv.(λt.t t) w v
-  ...
+  =β (λu.u) (λv.((λt.t t) w) v)
+  =β λv.((λt.t t) w) v
+  =β λv.(w w) v
+```
 
+</v-click>
+
+<v-click>
+
+```
 (λz w.w z w) w x =β ?
 
 (λx.x x) (λy.y y) =β ?
 ```
+
+</v-click>
 
 ---
 layout: default
@@ -335,24 +386,38 @@ $$\eta\text{-redex} \Rightarrow \lambda v.M\ v$$
 
 $$\text{Conversión} \Rightarrow \lambda v.M\ v =_\eta M$$
 
+Si una función solo aplica $M$ a su argumento, es equivalente a $M$ directamente.
+
 ---
 layout: default
 ---
 
-# Ejemplos η
+# Ejemplos — Conversión η
 
 ```
 (λx.f x) y  =η f y
+```
 
+<v-click>
+
+```
 (λx v.x v) ((λt.t t) w)
   =β λv.((λt.t t) w) v
-  ...
-  =η w y
+  =β λv.(w w) v
+  =η w w
+```
 
+</v-click>
+
+<v-click>
+
+```
 (λv.w x y v) z  =η ?
 
 λx.x t x  =η ?
 ```
+
+</v-click>
 
 ---
 layout: center
@@ -392,7 +457,7 @@ Consiste en ir reduciendo siempre la β-redex más **externa desde la izquierda*
 
 <div class="mt-2 text-green-600 font-semibold">
 
-(+) Si tiene, siempre permite llegar a su forma normal
+(+) Si tiene forma normal, siempre permite llegar a ella
 
 </div>
 
@@ -503,6 +568,23 @@ layout: default
 </div>
 
 ---
+layout: default
+---
+
+# Resumen — Estrategias de Reducción
+
+<div class="text-sm">
+
+| Estrategia | β-redex elegida | ¿Entra en λ? | Forma normal |
+|---|---|---|---|
+| **Call-by-name** | Más externa, izquierda | No | De cabecera |
+| **Orden normal** | Más externa, izquierda | Sí | Completa (garantizada si existe) |
+| **Call-by-value** | Más interna, izquierda | No | De cabecera |
+| **Orden aplicativo** | Más interna, izquierda | Sí | De cabecera |
+
+</div>
+
+---
 layout: center
 ---
 
@@ -597,38 +679,53 @@ IsZero = λn.n (λz.(λx.λy.y)) (λx.λy.x)
 layout: default
 ---
 
-# Ejemplo — IsZero
+# Ejemplo — IsZero 4
+
+<div class="text-xs">
 
 Averiguar si el número **4** es cero
 
 ```
-IsZero = λn.n (λz.(λx.λy.y)) (λx.λy.x)
-4      = λf.λx.f (f (f (f x)))
-0      = λf.λx.x
+IsZero = λn.n (λz.(λx.λy.y)) (λx.λy.x)    4 = λf.λx.f (f (f (f x)))
 ```
 
----
-layout: default
----
-
-# Resolución — IsZero 4
-
-<div class="text-sm">
-
 ```
-// IsZero 4
 (λn.n (λz.λx.λy.y) (λx.λy.x)) (λf.λx.f (f (f (f x))))
+```
 
+<v-click>
+
+```
 =β (λf.λx.f (f (f (f x)))) (λz.λx.λy.y) (λx.λy.x)
+```
 
+</v-click>
+
+<v-click>
+
+```
 =β (λx.(λz.λx.λy.y) ((λz.λx.λy.y) ((λz.λx.λy.y)
     ((λz.λx.λy.y) x)))) (λx.λy.x)
+```
 
+</v-click>
+
+<v-click>
+
+```
 =β (λz.λx.λy.y) ((λz.λx.λy.y) ((λz.λx.λy.y)
     ((λz.λx.λy.y) (λx.λy.x))))
+```
 
+</v-click>
+
+<v-click>
+
+```
 =β λx.λy.y    // False
 ```
+
+</v-click>
 
 </div>
 
@@ -638,33 +735,42 @@ layout: default
 
 # Ejemplo — Add 2 1
 
-```
-Add = λm.λn.λf.λx.m f (n f x)
-2   = λf.λx.f (f x)
-1   = λf.λx.f x
-```
-
----
-layout: default
----
-
-# Resolución — Add 2 1
-
-<div class="text-sm">
+<div class="text-xs">
 
 ```
-// Add 2 1
+Add = λm.λn.λf.λx.m f (n f x)    2 = λf.λx.f (f x)    1 = λf.λx.f x
+```
+
+```
 (λm.λn.λf.λx.m f (n f x)) (λf.λx.f (f x)) (λf.λx.f x)
+```
 
+<v-click>
+
+```
 =β (λn.λf.λx.(λf.λx.f (f x)) f (n f x)) (λf.λx.f x)
 =β (λf.λx.(λf.λx.f (f x)) f ((λf.λx.f x) f x))
+```
+
+</v-click>
+
+<v-click>
+
+```
 =β (λf.λx.(λx.f (f x)) ((λf.λx.f x) f x))
 =β (λf.λx.(f (f ((λf.λx.f x) f x))))
-=β (λf.λx.(f (f ((λx.f x) x))))
-=β (λf.λx.(f (f (f x))))
-
-// En los números de Church es 3
 ```
+
+</v-click>
+
+<v-click>
+
+```
+=β (λf.λx.(f (f ((λx.f x) x))))
+=β (λf.λx.(f (f (f x))))          // En los números de Church es 3 ✓
+```
+
+</v-click>
 
 </div>
 
@@ -705,13 +811,13 @@ layout: default
 # Otros combinadores
 
 ```
-B = λx.λy.λz.x (y z)
-C = λx.λy.λz.x z y
-D = λx.λy.λz.λv.x y (x v z)
-M = λx.x x
+B  = λx.λy.λz.x (y z)
+C  = λx.λy.λz.x z y
+D  = λx.λy.λz.λv.x y (x v z)
+M  = λx.x x
 K' = λx.λy.y
-Y = λf.(λx.f (x x)) (λx.f (x x))    // Punto fijo
-Ω = (λx.x x) (λx.x x)
+Y  = λf.(λx.f (x x)) (λx.f (x x))    // Punto fijo
+Ω  = (λx.x x) (λx.x x)
 ```
 
 ---
@@ -725,6 +831,23 @@ Se representa utilizando un combinador de punto fijo, en este caso utilizamos **
 ```
 Fact = Y (λf.λx.If (IsZero x) 1 (Mul x (f (Pred x))))
 ```
+
+<v-click>
+
+**Expansión de Fact 3:**
+
+```
+Fact 3
+= Y (λf.λx.If (IsZero x) 1 (Mul x (f (Pred x)))) 3
+= If (IsZero 3) 1 (Mul 3 (Fact (Pred 3)))
+= Mul 3 (Fact 2)
+= Mul 3 (Mul 2 (Fact 1))
+= Mul 3 (Mul 2 (Mul 1 (Fact 0)))
+= Mul 3 (Mul 2 (Mul 1 1))
+= 6
+```
+
+</v-click>
 
 ---
 layout: center
@@ -776,7 +899,13 @@ Second = λp.p False
 
 ```
 // Ejemplo → Second (Pair p q)
-...  =β q
+(λp.p (λx.λy.y)) ((λx.λy.λs.s x y) p q)
+  =β (λp.p (λx.λy.y)) ((λy.λs.s p y) q)
+  =β (λp.p (λx.λy.y)) (λs.s p q)
+  =β (λs.s p q) (λx.λy.y)
+  =β (λx.λy.y) p q
+  =β (λy.y) q
+  =β q
 ```
 
 </div>
@@ -810,6 +939,24 @@ Cons = λx.λy.Pair False (Pair x y)
 Head = λz.First (Second z)
 Tail = λz.Second (Second z)
 ```
+
+</div>
+
+---
+layout: center
+---
+
+# Resumen
+
+<div class="text-left max-w-lg mx-auto mt-4">
+
+- **Definición formal**: variables, abstracciones y aplicaciones
+- **Conversiones**: α (renombrar), β (aplicar), η (extensionalidad)
+- **Estrategias de reducción**: call-by-name, orden normal, call-by-value, orden aplicativo
+- **Funciones lógicas**: True, False, If, Not, And, Or
+- **Números de Church**: numerales y operaciones aritméticas
+- **Combinadores**: SKI y punto fijo (Y)
+- **Estructuras de datos**: pares ordenados y listas
 
 </div>
 
