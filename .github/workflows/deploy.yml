@@ -30,12 +30,15 @@ jobs:
           mkdir -p "$SITE_DIR"
 
           cp index.html "$SITE_DIR/"
+          cp logo-inspt.png "$SITE_DIR/" 2>/dev/null || true
 
           for dir in */; do
             if [ -f "${dir}package.json" ] && grep -q "slidev" "${dir}package.json"; then
               echo "Building ${dir%/}..."
               cd "$dir"
               npm ci
+              npm i -D playwright-chromium
+              npx playwright install --with-deps chromium
               npm run build
               mkdir -p "$SITE_DIR/${dir%/}"
               cp -r dist/* "$SITE_DIR/${dir%/}/"
