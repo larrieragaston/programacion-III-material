@@ -884,6 +884,35 @@ Los dos resuelven el mismo problema — evitar recalcular algo caro (o recrear u
 layout: default
 ---
 
+# `React.memo`: evitar renders de más
+
+```tsx
+const ProductCard = memo(function ProductCard({ name, price }: Product) {
+  console.log('renderizando', name)
+  return <div>{name} — ${price}</div>
+})
+
+function ProductGrid({ products }: { products: Product[] }) {
+  const [clicks, setClicks] = useState(0)
+  return (
+    <div>
+      <button onClick={() => setClicks(clicks + 1)}>Clicks: {clicks}</button>
+      {products.map((p) => <ProductCard key={p.name} {...p} />)}
+    </div>
+  )
+}
+```
+
+<div class="mt-1 text-sm opacity-80">
+
+`memo` compara props por igualdad superficial — si no cambiaron, reusa el render anterior. Mismo criterio que `useMemo`/`useCallback`: no conviene memoizar todo sin necesidad real.
+
+</div>
+
+---
+layout: default
+---
+
 # `useReducer`: estado complejo
 
 ```tsx
@@ -935,6 +964,35 @@ const { data: products, loading } = useFetch<Product[]>('/api/products')
 <div class="mt-3 text-sm opacity-80">
 
 Un **custom hook** es una función propia que empieza con `use` y combina otros hooks por dentro — acá, `useFetch` empaqueta el patrón `useState` + `useEffect` de la slide de `fetch` para poder reusarlo en cualquier componente sin repetir la lógica. Es la misma idea de extraer una función reutilizable de siempre, aplicada a lógica con estado.
+
+</div>
+
+---
+layout: default
+---
+
+# Error Boundaries: atrapar errores
+
+```tsx
+class ErrorBoundary extends Component<Props, { hasError: boolean }> {
+  state = { hasError: false }
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+  render() {
+    if (this.state.hasError) return <h1>Algo salió mal.</h1>
+    return this.props.children
+  }
+}
+
+<ErrorBoundary>
+  <ProductGrid products={products} />
+</ErrorBoundary>
+```
+
+<div class="mt-1 text-sm opacity-80">
+
+Un error al renderizar rompe **toda** la app, no solo el componente que falló. Es la única razón para escribir una clase hoy (o usar `react-error-boundary`) — no atrapa errores async, para eso sigue haciendo falta `try`/`catch`.
 
 </div>
 
@@ -1882,6 +1940,7 @@ layout: default
 | `useEffect(fn, deps)` | Efectos: fetch, timers, suscripciones |
 | `useContext`, `useRef` | Contexto global, referencias al DOM |
 | `useMemo`/`useCallback`/`useReducer` | Cachear valor/función, estado complejo |
+| `memo`, Error Boundary | Evitar renders de más, atrapar errores |
 | `useParams`, `useSearchParams` | Parámetros de ruta y query params |
 | `RequireAuth` + `<Outlet/>` | Ruta protegida (patrón middleware) |
 | Vite / Axios / Testing Library | Scaffolding, HTTP, testear componentes |
