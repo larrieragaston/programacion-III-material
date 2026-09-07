@@ -738,27 +738,52 @@ layout: default
 
 - Sirve para manejar **efectos secundarios**: código que interactúa con algo fuera del componente — pedidos de red, timers, suscripciones — la misma idea de "efecto" vista como opuesto a "pureza" en JS Funcional.
 - Recibe una función y, opcionalmente, un array de **dependencias**.
-- Cuándo corre, según las dependencias:
+- Un componente tiene un ciclo de vida: se **monta** (aparece en pantalla, una sola vez), se **actualiza** (se re-renderiza, muchas veces) y se **desmonta** (desaparece). Las dependencias deciden en cuáles de esas etapas corre el efecto:
 
 <div class="grid grid-cols-3 gap-4 mt-4 text-sm">
 <div class="p-3 rounded-lg bg-gray-100 text-center">
 
 **Sin array**
 
-Corre después de **cada** render.
+Corre después de **cada** render (cada actualización).
 </div>
 <div class="p-3 rounded-lg bg-yellow-50 border border-yellow-300 text-center">
 
 **`[]`**
 
-Corre **una sola vez**, después del primer render.
+Corre **una sola vez**, al montar. Nunca de nuevo.
 </div>
 <div class="p-3 rounded-lg bg-gray-100 text-center">
 
 **`[a, b]`**
 
-Corre en el primer render y de nuevo cada vez que `a` o `b` cambian.
+Corre al montar, y de nuevo en cada actualización donde `a` o `b` cambiaron.
 </div>
+</div>
+
+---
+layout: default
+---
+
+# `useEffect`: un timer simple
+
+```tsx
+function Clock() {
+  const [seconds, setSeconds] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => setSeconds((s) => s + 1), 1000)
+    return () => clearInterval(id)   // limpieza: corre al desmontar
+  }, [])
+
+  return <p>Pasaron {seconds} segundos</p>
+}
+```
+
+<div class="mt-2 text-sm opacity-80">
+
+Con `[]`, el `setInterval` se crea **una sola vez**, al montar — sin el array, se crearía un timer nuevo en cada render, acumulándolos. La función que `useEffect` **devuelve** es la limpieza: React la corre al desmontar el componente (acá, cancelando el timer para no dejarlo corriendo de más).
+
 </div>
 
 ---
@@ -771,12 +796,14 @@ layout: default
 function ProductList() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+
   useEffect(() => {
-    (async () => {
+    async function loadProducts() {
       const res = await fetch('/api/products')
       setProducts(await res.json())
       setLoading(false)
-    })()
+    }
+    loadProducts()
   }, [])   // [] — solo al montar el componente
 
   if (loading) return <p>Cargando...</p>
@@ -784,9 +811,9 @@ function ProductList() {
 }
 ```
 
-<div class="mt-2 text-sm opacity-80">
+<div class="mt-1 text-sm opacity-80">
 
-El mismo `async`/`await` de Asincronismo, disparado desde `useEffect` con `[]` — corre una vez, al montar. `loading` cubre el intermedio entre "no llegó" y "ya se puede mostrar", un patrón que reaparece con cualquier API real.
+Mismo `async`/`await` de Asincronismo — con `[]`, corre una sola vez al montar. `loading` cubre el intermedio hasta la respuesta.
 
 </div>
 
@@ -930,9 +957,9 @@ function Cart() {
 }
 ```
 
-<div class="mt-3 text-xs opacity-80">
+<div class="mt-1 text-xs opacity-80">
 
-Alternativa a `useState` para varias transiciones de estado. `cartReducer` es un `reducer` de JS Funcional (`(estado, acción) => nuevo estado`) — la misma función que usa `Array.reduce`, ahora manejando estado de un componente.
+Alternativa a `useState` para **varias transiciones relacionadas**: la lógica se centraliza en un `reducer`. `dispatch` no cambia el estado — manda una `Action`, y el reducer devuelve el **estado nuevo completo** según el `type` (misma idea que `Array.reduce`).
 
 </div>
 
@@ -964,35 +991,6 @@ const { data: products, loading } = useFetch<Product[]>('/api/products')
 <div class="mt-3 text-sm opacity-80">
 
 Un **custom hook** es una función propia que empieza con `use` y combina otros hooks por dentro — acá, `useFetch` empaqueta el patrón `useState` + `useEffect` de la slide de `fetch` para poder reusarlo en cualquier componente sin repetir la lógica. Es la misma idea de extraer una función reutilizable de siempre, aplicada a lógica con estado.
-
-</div>
-
----
-layout: default
----
-
-# Error Boundaries: atrapar errores
-
-```tsx
-class ErrorBoundary extends Component<Props, { hasError: boolean }> {
-  state = { hasError: false }
-  static getDerivedStateFromError() {
-    return { hasError: true }
-  }
-  render() {
-    if (this.state.hasError) return <h1>Algo salió mal.</h1>
-    return this.props.children
-  }
-}
-
-<ErrorBoundary>
-  <ProductGrid products={products} />
-</ErrorBoundary>
-```
-
-<div class="mt-1 text-sm opacity-80">
-
-Un error al renderizar rompe **toda** la app, no solo el componente que falló. Es la única razón para escribir una clase hoy (o usar `react-error-boundary`) — no atrapa errores async, para eso sigue haciendo falta `try`/`catch`.
 
 </div>
 
@@ -1249,7 +1247,7 @@ export default Layout
 
 <div class="mt-1 text-sm opacity-80">
 
-`NavLink` navega sin recargar la página y marca el link activo. `<Outlet />` es el "hueco" donde se inserta la ruta hija según la URL — el resto del layout se escribe una sola vez.
+`NavLink` navega sin recargar; `<Outlet />` es el "hueco" de la ruta hija — el `Layout` ya conectado a la ruta raíz (slide anterior).
 
 </div>
 
@@ -1443,16 +1441,36 @@ npm install --save-dev --save-exact prettier
 
 ```json
 // .prettierrc
-{
-  "semi": false,
-  "singleQuote": true,
-  "trailingComma": "es5"
+{ "semi": false, "singleQuote": true, "trailingComma": "es5" }
+```
+
+<div class="grid grid-cols-2 gap-3 text-xs mt-2">
+<div>
+
+**Antes**
+
+```tsx
+function greet(name){
+return "Hola "+name}
+```
+
+</div>
+<div>
+
+**Después de Prettier**
+
+```tsx
+function greet(name) {
+  return 'Hola ' + name
 }
 ```
 
+</div>
+</div>
+
 <div class="mt-2 text-xs opacity-80">
 
-Se integra con el editor (formatea al guardar) y con `git` (un *pre-commit hook* que lo corre antes de cada commit) — para que el estilo se mantenga consistente sin que nadie tenga que acordarse de revisarlo.
+No cambia qué hace el código, solo su forma. Se integra con el editor (formatea al guardar) y con `git` (un *pre-commit hook* antes de cada commit) — para que el estilo se mantenga consistente sin que nadie tenga que acordarse de revisarlo.
 
 </div>
 
@@ -1472,19 +1490,20 @@ Antes de ejecutar una sola línea, conviene detectar problemas reales del códig
 npm create vite@latest   # ya viene con un .eslintrc básico incluido
 ```
 
-```json
-// eslintrc.json (resumido)
-{
-  "extends": "eslint:recommended",
-  "rules": {
-    "quotes": ["error", "single"]
+```tsx
+// ESLint marca esto en rojo, antes de ejecutar una sola línea:
+function Item({ show }: { show: boolean }) {
+  if (show) {
+    useState(0)          // ❌ hook llamado condicionalmente
   }
+  const [x] = useState(1) // ❌ 'x' nunca se usa
+  return <p>Item</p>
 }
 ```
 
 <div class="mt-2 text-xs opacity-80">
 
-Un proyecto de Vite ya trae una configuración razonable por defecto; se puede extender con más reglas, o integrarlo con Prettier para que no choquen entre sí.
+Un proyecto de Vite ya trae una configuración razonable por defecto. La diferencia con Prettier: Prettier corrige **formato** (no cambia si el código funciona); ESLint señala **errores reales** — por eso se usan juntos, sin pisarse.
 
 </div>
 
@@ -1513,18 +1532,17 @@ npm install axios
 ```tsx
 // services/api.ts
 import axios from 'axios'
-
-const api = axios.create({
-  baseURL: 'http://localhost:4000/',
-  headers: { 'Content-Type': 'application/json' },
-})
-
+const api = axios.create({ baseURL: 'http://localhost:4000/' })
 export default api
+
+// uso: GET a /products
+const res = await api.get<Product[]>('/products')
+console.log(res.data)   // ya viene parseado, sin un segundo await
 ```
 
 <div class="mt-1 text-sm opacity-80">
 
-`axios.create()` arma una instancia con config base (URL, headers) reusada en cada pedido — se importa este `api` en vez de `axios` directo. Más adelante se le suman **interceptores** para el token.
+`axios.create()` arma una instancia reusada en cada pedido — se importa este `api` en vez de `axios` directo. A diferencia de `fetch`, `res.data` llega ya parseado. Más adelante se le suman **interceptores** para el token.
 
 </div>
 
@@ -1546,15 +1564,18 @@ VITE_API_URL=http://localhost:4000/
 
 # .env.production
 VITE_API_URL=https://mi-api.com/
+
+# .env.local — nunca se commitea (está en .gitignore)
+VITE_API_URL=http://192.168.0.5:4000/   # ej: probar desde el celular
 ```
 
 ```tsx
 const api = axios.create({ baseURL: import.meta.env.VITE_API_URL })
 ```
 
-<div class="mt-2 text-xs opacity-80">
+<div class="mt-1 text-xs opacity-80">
 
-Un proyecto Vite las lee de forma **nativa** — no hace falta instalar `dotenv` (útil en un proyecto Node "pelado", redundante acá). Toda variable que llegue al navegador debe empezar con `VITE_`, una medida de seguridad para no exponer por accidente una variable del sistema que no era pública.
+Un proyecto Vite las lee de forma **nativa** — no hace falta `dotenv`. Toda variable debe empezar con `VITE_`. `.env.local` tiene **prioridad**, es solo tuyo, y nunca se sube al repo.
 
 </div>
 
@@ -1940,7 +1961,7 @@ layout: default
 | `useEffect(fn, deps)` | Efectos: fetch, timers, suscripciones |
 | `useContext`, `useRef` | Contexto global, referencias al DOM |
 | `useMemo`/`useCallback`/`useReducer` | Cachear valor/función, estado complejo |
-| `memo`, Error Boundary | Evitar renders de más, atrapar errores |
+| `memo` | Evitar renders de más si las props no cambian |
 | `useParams`, `useSearchParams` | Parámetros de ruta y query params |
 | `RequireAuth` + `<Outlet/>` | Ruta protegida (patrón middleware) |
 | Vite / Axios / Testing Library | Scaffolding, HTTP, testear componentes |
